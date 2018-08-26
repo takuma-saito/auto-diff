@@ -1,4 +1,3 @@
-
 (define (d expr)
   (if (list? expr)
       (let ((v (car expr))
@@ -7,10 +6,12 @@
         (case v
           ('+ `(+ ,(d f) ,(d g)))
           ('- `(- ,(d f) ,(d g)))
-          ('* `(+ (* ,(d f) g) (* f ,(d g))))
-          ('/ `(/ (- (* f ,(d g)) (* ,(d f) g)) (* f f)))
+          ('* `(+ (* ,(d f) ,g) (* ,f ,(d g))))
+          ('/ `(/ (- (* ,f ,(d g)) (* ,(d f) ,g)) (* ,f ,f)))
           (else 'none)))
       expr))
 
-(d '(/ (* f h) (* (* f g) h)))
+(define (expand expr))
+
+(d '(/ (* f h) (+ k (/ (* f g) h))))
 

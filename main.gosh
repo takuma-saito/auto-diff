@@ -1,0 +1,16 @@
+
+(define (d expr)
+  (if (list? expr)
+      (let ((v (car expr))
+            (f (cadr expr))
+            (g (caddr expr)))
+        (case v
+          ('+ `(+ ,(d f) ,(d g)))
+          ('- `(- ,(d f) ,(d g)))
+          ('* `(+ (* ,(d f) g) (* f ,(d g))))
+          ('/ `(/ (- (* f ,(d g)) (* ,(d f) g)) (* f f)))
+          (else 'none)))
+      expr))
+
+(d '(/ (* f h) (* (* f g) h)))
+

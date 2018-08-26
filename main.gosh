@@ -1,17 +1,22 @@
-(define (d expr)
-  (if (list? expr)
-      (let ((v (car expr))
-            (f (cadr expr))
-            (g (caddr expr)))
-        (case v
-          ('+ `(+ ,(d f) ,(d g)))
-          ('- `(- ,(d f) ,(d g)))
-          ('* `(+ (* ,(d f) ,g) (* ,f ,(d g))))
-          ('/ `(/ (- (* ,f ,(d g)) (* ,(d f) ,g)) (* ,f ,f)))
-          (else 'none)))
-      expr))
+
+(eq? 'x 'x)
+
+(define (d var expr)
+  (cond
+   ((list? expr)
+    (let ((v (car expr))
+          (f (cadr expr))
+          (g (caddr expr)))
+      (case v
+          ('+ `(+ ,(d var f) ,(d var g)))
+          ('- `(- ,(d var f) ,(d var g)))
+          ('* `(+ (* ,(d var f) ,g) (* ,f ,(d var g))))
+          ('/ `(/ (- (* ,f ,(d var g)) (* ,(d var f) ,g)) (* ,f ,f)))
+          ('^ `(* (* n (^ ,f (- ,g 1)) ,(d var f))))
+          (else 'none))))
+   ((eq? expr var) 1)
+   (else 0)))
 
 (define (expand expr))
 
-(d '(/ (* f h) (+ k (/ (* f g) h))))
-
+(d 'x '(* (+ x 1) (+ (^ x 2) 3)))
